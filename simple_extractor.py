@@ -31,18 +31,21 @@ dataset_settings = {
         'num_classes': 20,
         'label': ['Background', 'Hat', 'Hair', 'Glove', 'Sunglasses', 'Upper-clothes', 'Dress', 'Coat',
                   'Socks', 'Pants', 'Jumpsuits', 'Scarf', 'Skirt', 'Face', 'Left-arm', 'Right-arm',
-                  'Left-leg', 'Right-leg', 'Left-shoe', 'Right-shoe']
+                  'Left-leg', 'Right-leg', 'Left-shoe', 'Right-shoe'],
+        'indexs': [1,2,13,14,15]
     },
     'atr': {
         'input_size': [512, 512],
         'num_classes': 18,
         'label': ['Background', 'Hat', 'Hair', 'Sunglasses', 'Upper-clothes', 'Skirt', 'Pants', 'Dress', 'Belt',
-                  'Left-shoe', 'Right-shoe', 'Face', 'Left-leg', 'Right-leg', 'Left-arm', 'Right-arm', 'Bag', 'Scarf']
+                  'Left-shoe', 'Right-shoe', 'Face', 'Left-leg', 'Right-leg', 'Left-arm', 'Right-arm', 'Bag', 'Scarf'],
+        'indexs': [1,2,11,12,13]
     },
     'pascal': {
         'input_size': [512, 512],
         'num_classes': 7,
         'label': ['Background', 'Head', 'Torso', 'Upper Arms', 'Lower Arms', 'Upper Legs', 'Lower Legs'],
+        'indexs': [1,3,4]
     }
 }
 
@@ -64,7 +67,7 @@ def get_arguments():
     return parser.parse_args()
 
 
-def get_palette(num_cls):
+def get_palette(num_cls, indexs):
     """ Returns the color map for visualizing the segmentation mask.
     Args:
         num_cls: Number of classes
@@ -74,17 +77,27 @@ def get_palette(num_cls):
     n = num_cls
     palette = [0] * (n * 3)
     for j in range(0, n):
-        lab = j
-        palette[j * 3 + 0] = 0
-        palette[j * 3 + 1] = 0
-        palette[j * 3 + 2] = 0
-        i = 0
-        while lab:
-            palette[j * 3 + 0] |= (((lab >> 0) & 1) << (7 - i))
-            palette[j * 3 + 1] |= (((lab >> 1) & 1) << (7 - i))
-            palette[j * 3 + 2] |= (((lab >> 2) & 1) << (7 - i))
-            i += 1
-            lab >>= 3
+        # lab = j
+        # default to white
+        palette[j * 3 + 0] = 255
+        palette[j * 3 + 1] = 255
+        palette[j * 3 + 2] = 255
+        try:
+            if (indexs.index(j) >= 0):
+                # black the face, arm..
+                palette[j * 3 + 0] = 0
+                palette[j * 3 + 1] = 0
+                palette[j * 3 + 2] = 0
+        except ValueError:
+            pass
+        
+        # i = 0
+        # while lab:
+        #     palette[j * 3 + 0] |= (((lab >> 0) & 1) << (7 - i))
+        #     palette[j * 3 + 1] |= (((lab >> 1) & 1) << (7 - i))
+        #     palette[j * 3 + 2] |= (((lab >> 2) & 1) << (7 - i))
+        #     i += 1
+        #     lab >>= 3
     return palette
 
 
@@ -99,6 +112,7 @@ def main():
     num_classes = dataset_settings[args.dataset]['num_classes']
     input_size = dataset_settings[args.dataset]['input_size']
     label = dataset_settings[args.dataset]['label']
+    indexs = dataset_settings[args.dataset]['indexs']
     print("Evaluating total class number {} with {}".format(num_classes, label))
 
     model = networks.init_model('resnet101', num_classes=num_classes, pretrained=None)
@@ -123,7 +137,7 @@ def main():
     if not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
 
-    palette = get_palette(num_classes)
+    palette = get_palette(num_classes, indexs)
     with torch.no_grad():
         for idx, batch in enumerate(tqdm(dataloader)):
             image, meta = batch
