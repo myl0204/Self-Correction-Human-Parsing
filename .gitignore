@@ -3,3 +3,9 @@
 data/
 log/
 pretrain_model/
+
+checkpoints/
+
+inputs/
+
+outputs/
