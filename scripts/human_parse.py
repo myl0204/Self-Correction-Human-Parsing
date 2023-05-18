@@ -1,7 +1,7 @@
 import modules.scripts as scripts
 from modules.shared import opts
 import gradio as gr
-from ..simple_extractor import parse_image
+from simple_extractor import parse_image
 
 
 class HumanParseScript(scripts.Script):
