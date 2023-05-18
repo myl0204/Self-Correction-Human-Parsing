@@ -10,7 +10,7 @@
 @License :   This source code is licensed under the license found in the
              LICENSE file in the root directory of this source tree.
 """
-
+from datetime import datetime
 import os
 import torch
 import argparse
@@ -176,7 +176,7 @@ def main():
                 np.save(logits_result_path, logits_result)
     return
 
-def parse_image(image):
+def parse_image(image, output_dir=None):
     dataset = 'lip'
 
     num_classes = dataset_settings[dataset]['num_classes']
@@ -224,6 +224,13 @@ def parse_image(image):
             parsing_result = np.argmax(logits_result, axis=2)
             output_img = Image.fromarray(np.asarray(parsing_result, dtype=np.uint8))
             output_img.putpalette(palette)
+
+    if output_img is not None and output_dir is not None:
+        # 临时保存
+        now = datetime.now()
+        output_image_name = now.strftime("%H:%M:%S") + '.png'
+        parsing_result_path = os.path.join(output_dir, output_image_name)
+        output_img.save(parsing_result_path)
 
     return output_img
 
