@@ -34,7 +34,8 @@ dataset_settings = {
         'label': ['Background', 'Hat', 'Hair', 'Glove', 'Sunglasses', 'Upper-clothes', 'Dress', 'Coat',
                   'Socks', 'Pants', 'Jumpsuits', 'Scarf', 'Skirt', 'Face', 'Left-arm', 'Right-arm',
                   'Left-leg', 'Right-leg', 'Left-shoe', 'Right-shoe'],
-        'indexs': [1,2,13,14,15]
+        # 'indexs': [1,2,13,14,15]
+        'indexs': [5, 6, 7, 12]
     },
     'atr': {
         'input_size': [512, 512],
