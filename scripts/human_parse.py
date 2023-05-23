@@ -1,6 +1,7 @@
 import modules.scripts as scripts
 from modules.shared import opts
 from simple_extractor import parse_image
+from PIL import ImageOps, ImageChops
 
 
 class HumanParseScript(scripts.Script):
@@ -16,10 +17,14 @@ class HumanParseScript(scripts.Script):
 
     def process(self, p, *args):
         # get orig image
-        orig_image = getattr(p, "init_images", [None])[0]
+        image = getattr(p, "init_images", [None])[0]
 
         # parse image
-        mask_image = parse_image(orig_image, opts.outdir_img2img_samples)
+        mask_image = parse_image(image, opts.outdir_img2img_samples)
+
+        # inpaint
+        alpha_mask = ImageOps.invert(image.split()[-1]).convert('L').point(lambda x: 255 if x > 0 else 0, mode='1')
+        mask_image = ImageChops.lighter(alpha_mask, mask_image.convert('L')).convert('L')
 
         # set mask image for process
         p.image_mask = mask_image
