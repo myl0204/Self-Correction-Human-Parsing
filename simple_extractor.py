@@ -185,7 +185,7 @@ def parse_image(image, output_dir=None):
 
     model = networks.init_model('resnet101', num_classes=num_classes, pretrained=None)
 
-    model_restore = 'checkpoint/final.pth'
+    model_restore = '/checkpoint/final.pth'
     state_dict = torch.load(model_restore)['state_dict']
     from collections import OrderedDict
     new_state_dict = OrderedDict()
