@@ -56,7 +56,7 @@ class Caffe2CompatibleConverter(object):
 
 def patch(model, target, updater, *args, **kwargs):
     """
-    recursively (post-order) update all modules with the target type and its
+    recursively (post-order) update all cmodules with the target type and its
     subclasses, make a initialization/composition/inheritance/... via the
     updater.create_from.
     """

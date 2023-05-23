@@ -1,6 +1,5 @@
 import modules.scripts as scripts
 from modules.shared import opts
-import gradio as gr
 from simple_extractor import parse_image
 
 
@@ -14,23 +13,6 @@ class HumanParseScript(scripts.Script):
 
     def show(self, is_img2img):
         return scripts.AlwaysVisible
-
-    def ui(self, is_img2img):
-        with gr.Accordion('HumanParse', open=False):
-            with gr.Row():
-                angle = gr.Slider(
-                    minimum=0.0,
-                    maximum=360.0,
-                    step=1,
-                    value=0,
-                    label="Angle"
-                )
-                checkbox = gr.Checkbox(
-                    False,
-                    label="Checkbox"
-                )
-        # TODO: add more UI components (cf. https://gradio.app/docs/#components)
-        return [angle, checkbox]
 
     def process(self, p, *args):
         # get orig image

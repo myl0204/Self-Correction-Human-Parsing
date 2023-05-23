@@ -11,7 +11,7 @@
 
 # -- Path setup --------------------------------------------------------------
 
-# If extensions (or modules to document with autodoc) are in another directory,
+# If extensions (or cmodules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
@@ -73,7 +73,7 @@ try:
 except ImportError:
     for m in [
         "torch", "torchvision", "torch.nn", "torch.nn.parallel", "torch.distributed", "torch.multiprocessing", "torch.autograd",
-        "torch.autograd.function", "torch.nn.modules", "torch.nn.modules.utils", "torch.utils", "torch.utils.data", "torch.onnx",
+        "torch.autograd.function", "torch.nn.cmodules", "torch.nn.cmodules.utils", "torch.utils", "torch.utils.data", "torch.onnx",
         "torchvision", "torchvision.ops",
     ]:
         sys.modules[m] = mock.Mock(name=m)

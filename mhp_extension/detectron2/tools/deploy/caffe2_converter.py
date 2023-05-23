@@ -74,7 +74,7 @@ if __name__ == "__main__":
         script_model = tracer.export_torchscript()
         script_model.save(os.path.join(args.output, "model.ts"))
 
-        # Recursively print IR of all modules
+        # Recursively print IR of all cmodules
         with open(os.path.join(args.output, "model_ts_IR.txt"), "w") as f:
             try:
                 f.write(script_model._actual_script_module._c.dump_to_str(True, False, False))

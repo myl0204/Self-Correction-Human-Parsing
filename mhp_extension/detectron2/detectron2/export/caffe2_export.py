@@ -43,7 +43,7 @@ def export_onnx_model(model, inputs):
     """
     assert isinstance(model, torch.nn.Module)
 
-    # make sure all modules are in eval mode, onnx may change the training state
+    # make sure all cmodules are in eval mode, onnx may change the training state
     # of the module if the states are not consistent
     def _check_eval(module):
         assert not module.training
