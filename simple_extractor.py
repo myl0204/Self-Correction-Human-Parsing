@@ -42,7 +42,8 @@ dataset_settings = {
         'num_classes': 18,
         'label': ['Background', 'Hat', 'Hair', 'Sunglasses', 'Upper-clothes', 'Skirt', 'Pants', 'Dress', 'Belt',
                   'Left-shoe', 'Right-shoe', 'Face', 'Left-leg', 'Right-leg', 'Left-arm', 'Right-arm', 'Bag', 'Scarf'],
-        'indexs': [1,2,11,12,13]
+        # 'indexs': [1,2,11,12,13]
+        'indexs': [4, 5, 6, 7]
     },
     'pascal': {
         'input_size': [512, 512],
