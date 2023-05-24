@@ -34,30 +34,26 @@ class HumanParseScript(scripts.Script):
             script_args = p.script_args[human_parse_script.args_from:human_parse_script.args_to]
 
             args = script_args[0]
-            print(f"check_script_enable enable args, {args}", file=sys.stderr)
+            print(f"check_script_enable enable args, {args}")
             return args
 
         except Exception as e:
-            print(e, file=sys.stderr)
+            print(e)
             return False
 
     def process(self, p, *args):
         enable = self.check_script_enable(p)
         if enable:
-            print("check_script_enable result true", file=sys.stderr)
+            print("check_script_enable result true")
 
         if not enable:
-            print("check_script_enable result false", file=sys.stderr)
+            print("check_script_enable result false")
 
         # get orig image
         image = getattr(p, "init_images", [None])[0]
 
         # parse image
         mask_image = parse_image(image, shared.opts.outdir_img2img_samples)
-
-        # inpaint
-        alpha_mask = ImageOps.invert(image.split()[-1]).convert('L').point(lambda x: 255 if x > 0 else 0, mode='1')
-        mask_image = ImageChops.lighter(alpha_mask, mask_image.convert('L')).convert('L')
 
         # set mask image for process
         p.image_mask = mask_image
