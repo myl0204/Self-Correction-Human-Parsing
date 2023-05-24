@@ -1,9 +1,11 @@
 import sys
 import gc
+import gradio as gr
 
 from modules import scripts, processing, shared, devices
 from simple_extractor import parse_image
 from PIL import ImageOps, ImageChops
+from modules.ui_components import FormRow
 
 
 class HumanParseScript(scripts.Script):
@@ -16,6 +18,12 @@ class HumanParseScript(scripts.Script):
 
     def show(self, is_img2img):
         return scripts.AlwaysVisible
+
+    def ui(self, is_img2img):
+        with FormRow(elem_classes="checkboxes-row", variant="compact"):
+            enabled = gr.Checkbox(label='Enable', value=False)
+
+        return [enabled]
 
     def check_script_enable(self, p: processing.StableDiffusionProcessing):
 
@@ -34,8 +42,9 @@ class HumanParseScript(scripts.Script):
 
             script_args = p.script_args[human_parse_script.args_from:human_parse_script.args_to]
 
+            print(f"check_script_enable enable args1, {script_args}")
             args = script_args[0]
-            print(f"check_script_enable enable args, {args}")
+            print(f"check_script_enable enable args2, {args}")
             return args
 
         except Exception as e:
