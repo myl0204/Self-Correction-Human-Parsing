@@ -1,6 +1,7 @@
 import sys
+import gc
 
-from modules import scripts, processing, shared
+from modules import scripts, processing, shared, devices
 from simple_extractor import parse_image
 from PIL import ImageOps, ImageChops
 
@@ -58,5 +59,9 @@ class HumanParseScript(scripts.Script):
         # set mask image for process
         p.image_mask = mask_image
         return
+
+    def postprocess(self, p, processed, *args):
+        gc.collect()
+        devices.torch_gc()
 
 

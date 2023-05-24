@@ -187,7 +187,7 @@ def parse_image(image, output_dir=None):
     input_size = dataset_settings[dataset]['input_size']
 
     global cached_model
-    if cached_model is None:
+    if cached_model is not None:
         model = cached_model
     else:
         model = networks.init_model('resnet101', num_classes=num_classes, pretrained=None)
