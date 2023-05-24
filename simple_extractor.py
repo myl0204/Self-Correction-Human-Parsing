@@ -27,6 +27,8 @@ from datasets.simple_extractor_dataset import SimpleFolderDataset
 
 from datasets.simple_image_extractor import SimpleImageDataset
 
+cached_model = None
+
 dataset_settings = {
     'lip': {
         'input_size': [473, 473],
@@ -184,18 +186,23 @@ def parse_image(image, output_dir=None):
     num_classes = dataset_settings[dataset]['num_classes']
     input_size = dataset_settings[dataset]['input_size']
 
-    model = networks.init_model('resnet101', num_classes=num_classes, pretrained=None)
+    global cached_model
+    if cached_model is None:
+        model = cached_model
+    else:
+        model = networks.init_model('resnet101', num_classes=num_classes, pretrained=None)
 
-    model_restore = '/checkpoint/atr.pth'
-    state_dict = torch.load(model_restore)['state_dict']
-    from collections import OrderedDict
-    new_state_dict = OrderedDict()
-    for k, v in state_dict.items():
-        name = k[7:]  # remove `module.`
-        new_state_dict[name] = v
-    model.load_state_dict(new_state_dict)
-    model.cuda()
-    model.eval()
+        model_restore = '/checkpoint/atr.pth'
+        state_dict = torch.load(model_restore)['state_dict']
+        from collections import OrderedDict
+        new_state_dict = OrderedDict()
+        for k, v in state_dict.items():
+            name = k[7:]  # remove `module.`
+            new_state_dict[name] = v
+        model.load_state_dict(new_state_dict)
+        model.cuda()
+        model.eval()
+        cached_model = model
 
     transform = transforms.Compose([
         transforms.ToTensor(),
