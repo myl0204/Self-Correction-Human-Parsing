@@ -64,7 +64,7 @@ class HumanParseScript(scripts.Script):
         image = getattr(p, "init_images", [None])[0]
 
         # parse image
-        mask_image = parse_image(image, shared.opts.outdir_img2img_samples)
+        mask_image = parse_image(image)
 
         # set mask image for process
         p.image_mask = mask_image
